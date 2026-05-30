@@ -466,10 +466,20 @@
       openModal('contact');
     }
 
-    function handleContact() {
+    async function handleContact() {
       const email = document.getElementById('contact-email').value.trim();
       const phone = document.getElementById('contact-phone').value.trim();
+      const question = document.getElementById('searchInput').value.trim();
       if (!email && !phone) return alert('Veuillez renseigner votre email ou téléphone.');
+
+      try {
+        await fetch('https://formspree.io/f/xredvzla', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, phone, question })
+        });
+      } catch(e) {}
+
       document.getElementById('contact-form').style.display = 'none';
       document.getElementById('contact-confirm').style.display = 'block';
       document.getElementById('searchInput').value = '';
