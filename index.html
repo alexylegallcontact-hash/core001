@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Core</title>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
   <style>
@@ -13,13 +13,17 @@
       --border: #e2dbd0;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+      position: relative;
+    }
     body {
       background: var(--bg);
       font-family: 'Jost', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
     }
     body::before {
       content: '';
@@ -193,7 +197,6 @@
       align-items: flex-end;
       justify-content: center;
       z-index: 100;
-      padding: 0;
     }
     .modal-overlay.open { display: flex; }
     .modal {
@@ -301,15 +304,8 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     @media (min-width: 600px) {
-      .modal-overlay {
-        align-items: center;
-        padding: 24px;
-      }
-      .modal {
-        border-radius: 20px;
-        padding: 44px 40px 36px;
-        box-shadow: 0 24px 80px rgba(0,0,0,0.12);
-      }
+      .modal-overlay { align-items: center; padding: 24px; }
+      .modal { border-radius: 20px; padding: 44px 40px 36px; box-shadow: 0 24px 80px rgba(0,0,0,0.12); }
       .modal-handle { display: none; }
     }
   </style>
@@ -399,7 +395,6 @@
     function openModal(type) {
       document.getElementById('modal-' + type).classList.add('open');
     }
-
     function closeModal(type) {
       document.getElementById('modal-' + type).classList.remove('open');
       if (type === 'login') {
@@ -415,13 +410,11 @@
         document.getElementById('contact-confirm').style.display = 'none';
       }
     }
-
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
       overlay.addEventListener('click', function(e) {
         if (e.target === this) closeModal(this.id.replace('modal-', ''));
       });
     });
-
     function handleLogin() {
       const email = document.getElementById('login-email').value.trim();
       if (!email) return alert('Veuillez entrer votre email.');
@@ -429,7 +422,6 @@
       document.getElementById('login-confirm').style.display = 'block';
       setTimeout(() => closeModal('login'), 2000);
     }
-
     function handleSignup() {
       const email = document.getElementById('signup-email').value.trim();
       if (!email) return alert('Veuillez entrer votre email.');
@@ -437,19 +429,16 @@
       document.getElementById('signup-confirm').style.display = 'block';
       setTimeout(() => closeModal('signup'), 2500);
     }
-
     function sendQuestion() {
       const q = document.getElementById('searchInput').value.trim();
       if (!q) return;
       openModal('contact');
     }
-
     async function handleContact() {
       const email = document.getElementById('contact-email').value.trim();
       const phone = document.getElementById('contact-phone').value.trim();
       const question = document.getElementById('searchInput').value.trim();
       if (!email && !phone) return alert('Veuillez renseigner votre email ou téléphone.');
-
       try {
         const response = await fetch('https://formspree.io/f/xredvzla', {
           method: 'POST',
@@ -464,7 +453,6 @@
       } catch(e) {
         console.error('Fetch error:', e);
       }
-
       document.getElementById('contact-form').style.display = 'none';
       document.getElementById('contact-confirm').style.display = 'block';
       document.getElementById('searchInput').value = '';
@@ -476,7 +464,6 @@
         document.getElementById('contact-phone').value = '';
       }, 2500);
     }
-
     document.getElementById('searchInput').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') sendQuestion();
     });
